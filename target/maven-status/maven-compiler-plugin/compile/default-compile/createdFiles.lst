@@ -1,0 +1,6 @@
+org\portfolio\com\backend\dto\UserDto.class
+org\portfolio\com\backend\model\User.class
+org\portfolio\com\backend\BackEndApplication.class
+org\portfolio\com\backend\converters\ModelMappingConfig.class
+org\portfolio\com\backend\controllers\UserController.class
+org\portfolio\com\backend\repositories\UserRepository.class

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+        <link rel="stylesheet" type="text/css" href="./index.css" media="screen">
+    <title>WebCrud</title>
+</head>
+
+<body>
+    <div class="Spring">
+
+        <h1 class="title">Web Crud</h1>
+        
+        <div class="container">
+
+            <div class="contact-form">
+
+                <div class="form-field col-lg-12">
+                    <input id="userID" class="input-text form-control" type="text" name="" placeholder="ID" readonly="readonly">
+                </div>
+
+                <div class="form-field col-lg-12">
+                    <input id="name" class="input-text form-control" type="text" name="" placeholder="NAME" required="required">
+                </div>
+
+                <div class="form-field col-lg-12">
+                    <input id="age" class="input-text form-control" type="number" min="0" max="110" name="" placeholder="AGE" required="required">
+                    <span class= invalid id=spanage></span>
+                </div>
+
+                <div class="row justify-content-md-center">
+
+                    <div class="col-sm-2 ">
+                        <button class="buttons" id = save>Save</button>
+                    </div>
+                    <div class="col-sm-2 ">
+                        <button class="buttons" id = reset>Reset</button>
+                    </div>
+                    <div class="col-sm-2">
+                        <button class="buttons" data-bs-toggle="modal" data-bs-target="#Modal">Search</button>
+                    </div>
+                    <div class="col-sm-2 ">
+                        <button id="delete" class="buttons">Delete</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header d-flex justify-content-center" id="header">
+                    <h5 class="modal-title title " id="ModalLabel">Search</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="recipient-name" class="col-form-label"></label>
+                            <input type="text" class="form-control input-text" id="recipient-name" placeholder="NAME">
+                        </div>
+                    </form>
+                    <table class="table table-hover" id="tableresult">
+                        <thead>
+                          <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Age</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Delete</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="buttons" id = "research" >Research</button>
+                    <button type="button" class="buttons" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="./index.js"></script>
+</body>
+
+</html>
