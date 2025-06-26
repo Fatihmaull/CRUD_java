@@ -15,5 +15,5 @@ public class UserDto {
 
     @NotNull(message = "Age may not be null")
     @Range(min=0, max=110)
-    private Integer Age;
+    private Integer age;
 }
