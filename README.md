@@ -1,7 +1,7 @@
 # Web Crud with Java Spring Boot
 
 # About the project
-This project was created to demonstrate my knowledge in a full stack creation.
+This project was created to demonstrate CRUD actions in a website developed with java 
 
 ## Index
 ![image](https://github.com/user-attachments/assets/3818b9bd-b35c-4c41-979b-19cb11396a3a)
