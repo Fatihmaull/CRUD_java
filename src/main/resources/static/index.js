@@ -1,174 +1,154 @@
 $(document).ready(function () {
-    saveButton()
-    reset()
-    research()
-    resetcampus()
-    clickdelete()
+    loadAllUsers()
+    setupHandlers()
 })
 
-function saveButton() {
-    $("#save").click(function () {
-
-        var id = $("#userID").val()
-        var name = $("#name").val()
-        var age = $("#age").val()
-
-        if (validAge(parseInt(age) && validName(name))) {
-            $("#spanage").text("")
-            ajaxSave(id, name, parseInt(age))
-        } else {
-            $("#spanage").text("Invalid age")
-        }
+function setupHandlers() {
+    $("#save").click(handleSave)
+    $("#reset").click(resetForm)
+    $("#research").click(handleSearch)
+    $("#delete").click(function () {
+        const id = $("#userID").val()
+        if (id) funcdelete(id)
     })
 }
 
-function validAge(Age) {
+function handleSave() {
+    const id = $("#userID").val()
+    const name = $("#name").val()
+    const age = parseInt($("#age").val())
 
-    if (Age >= 0 && Age <= 110) {
-        return true
+    if (!validName(name)) {
+        alert("Name cannot be empty.")
+        return
     }
 
-    return false
-}
-
-function validName(Name) {
-
-    if (Name != null) {
-        return true
+    if (!validAge(age)) {
+        $("#spanage").text("Invalid age")
+        return
     }
-    return false
-}
 
-function ajaxSave(id, name, age) {
+    $("#spanage").text("")
+
+    const method = id ? 'PUT' : 'POST'
+    const url = id ? "update" : "save"
 
     $.ajax({
-        url: "save",
-        type: 'POST',
-        async: true,
+        url: url,
+        type: method,
         contentType: 'application/json',
-        data: JSON.stringify({
-            id: id,
-            name: name,
-            age: age
-        }),
-        success: function (response) {
-            $("#userID").val(response.id)
-            alert("Sucess")
+        data: JSON.stringify({ id, name, age }),
+        success: function () {
+            alert("Saved successfully!")
+            resetForm()
+            loadAllUsers()
+            $('#Modal').modal('hide')
+        },
+        error: function (xhr) {
+            alert("Error saving user: " + xhr.responseText)
         }
-
-    }).fail(function (xhr, status, errorThrow) {
-        alert("error saving user " + xhr.responseText);
     })
 }
 
-function reset() {
-
-    $("#reset").click(function () {
-
-        resetcampus()
-
-    })
-
+function validAge(age) {
+    return age >= 0 && age <= 110
 }
 
-function research() {
-
-    $("#research").click(function () {
-        var name = $("#recipient-name").val()
-
-
-        if (name != null && name.trim() != "") {
-
-            $.ajax({
-                url: "searchbyname",
-                type: 'GET',
-                async: true,
-                contentType: 'application/json',
-                data: "name=" + name,
-                success: table
-
-            }).fail(function (xhr, status, errorThrow) {
-                alert("error when searching user " + xhr.responseText);
-            })
-        }
-
-    })
-
+function validName(name) {
+    return name && name.trim() !== ""
 }
 
-function table(response) {
+function handleSearch() {
+    const name = $("#recipient-name").val()
 
-    $("#tableresult > tbody > tr").remove();
-
-    for (var i = 0; i < response.length; i++) {
-
-        $("#tableresult > tbody").append("<tr id= '" + response[i].id + "'><td>" + response[i].id + "</td><td>" + response[i].name +
-            "</td><td>" + response[i].age +
-            "</td><td> <button type='button' onclick=funcedit(" + response[i].id + ") class='buttons' id = 'edit'>edit</button>" +
-            "</td><td> <button type='button' onclick=funcdelete(" + response[i].id + ") id='button' class='buttons' id ='delete'>Delete</button> </td></tr>");
-
+    if (!validName(name)) {
+        alert("Please enter a name to search.")
+        return
     }
+
+    $.ajax({
+        url: "searchbyname",
+        type: 'GET',
+        data: { name: name },
+        success: renderTable,
+        error: function (xhr) {
+            alert("Error when searching user: " + xhr.responseText)
+        }
+    })
+}
+
+function loadAllUsers() {
+    $.ajax({
+        url: "listall",
+        type: 'GET',
+        success: renderTable,
+        error: function () {
+            alert("Failed to load user list.")
+        }
+    })
+}
+
+function renderTable(users) {
+    const tbody = $("#tableresult > tbody")
+    tbody.empty()
+
+    if (users.length === 0) {
+        tbody.append("<tr><td colspan='5'>No users found</td></tr>")
+        return
+    }
+
+    users.forEach(user => {
+        const row = `
+            <tr id="${user.id}">
+                <td>${user.id}</td>
+                <td>${user.name}</td>
+                <td>${user.age}</td>
+                <td><button type="button" class="btn btn-sm btn-warning" onclick="funcedit(${user.id})">Edit</button></td>
+                <td><button type="button" class="btn btn-sm btn-danger" onclick="funcdelete(${user.id})">Delete</button></td>
+            </tr>
+        `
+        tbody.append(row)
+    })
 }
 
 function funcedit(id) {
-
     $.ajax({
         url: "searchuser",
         type: 'GET',
-        async: true,
-        contentType: 'application/json',
-        data: "iduser=" + id,
-        success: function (response) {
-            $("#userID").val(response.id)
-            $("#name").val(response.name)
-            $("#age").val(response.age)
-            $('#Modal').modal('toggle');
+        data: { iduser: id },
+        success: function (user) {
+            $("#userID").val(user.id)
+            $("#name").val(user.name)
+            $("#age").val(user.age)
+            $('#Modal').modal('show')
+        },
+        error: function (xhr) {
+            alert("Error finding user: " + xhr.responseText)
         }
-
-    }).fail(function (xhr, status, errorThrow) {
-        alert("error when searching user " + xhr.responseText);
     })
-
 }
 
 function funcdelete(id) {
+    if (!confirm("Do you really want to delete?")) return
 
-
-    if (confirm("Do you really want to delete? ")) {
-
-        $.ajax({
-            url: "delete",
-            type: 'DELETE',
-            data: "iduser=" + id,
-            success: function (response) {
-
-                alert(response);
-                resetcampus();
-                $("#" + id).remove();
-
-            }
-
-        }).fail(function (xhr, status, errorThrow) {
-            alert("error when delete user " + xhr.responseText);
-        })
-    }
-
+    $.ajax({
+        url: "delete",
+        type: 'DELETE',
+        data: { iduser: id },
+        success: function () {
+            alert("User deleted successfully!")
+            resetForm()
+            loadAllUsers()
+        },
+        error: function (xhr) {
+            alert("Error deleting user: " + xhr.responseText)
+        }
+    })
 }
 
-function resetcampus() {
+function resetForm() {
     $("#userID").val("")
     $("#name").val("")
     $("#age").val("")
-}
-
-function clickdelete(){
-
-    var id = $("#userID").val()
-    
-    $("#delete").click(function(){
-        var id = $("#userID").val()
-        if(id != null || id != ""){
-            funcdelete(id)
-        }
-    })
+    $("#spanage").text("")
 }

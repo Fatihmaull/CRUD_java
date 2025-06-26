@@ -3,96 +3,204 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-        crossorigin="anonymous"></script>
-        <link rel="stylesheet" type="text/css" href="./index.css" media="screen">
-    <title>WebCrud</title>
+    <title>User Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <div class="Spring">
+<body class="bg-light">
+<div class="container py-5">
+    <h1 class="mb-4 text-center">User Management</h1>
 
-        <h1 class="title">Web Crud</h1>
-        
-        <div class="container">
-
-            <div class="contact-form">
-
-                <div class="form-field col-lg-12">
-                    <input id="userID" class="input-text form-control" type="text" name="" placeholder="ID" readonly="readonly">
-                </div>
-
-                <div class="form-field col-lg-12">
-                    <input id="name" class="input-text form-control" type="text" name="" placeholder="NAME" required="required">
-                </div>
-
-                <div class="form-field col-lg-12">
-                    <input id="age" class="input-text form-control" type="number" min="0" max="110" name="" placeholder="AGE" required="required">
-                    <span class= invalid id=spanage></span>
-                </div>
-
-                <div class="row justify-content-md-center">
-
-                    <div class="col-sm-2 ">
-                        <button class="buttons" id = save>Save</button>
-                    </div>
-                    <div class="col-sm-2 ">
-                        <button class="buttons" id = reset>Reset</button>
-                    </div>
-                    <div class="col-sm-2">
-                        <button class="buttons" data-bs-toggle="modal" data-bs-target="#Modal">Search</button>
-                    </div>
-                    <div class="col-sm-2 ">
-                        <button id="delete" class="buttons">Delete</button>
-                    </div>
-
-                </div>
+    <div class="card p-4 mb-4">
+        <h4 class="mb-3">Add / Edit User</h4>
+        <div class="row g-3">
+            <div class="col-md-2">
+                <input type="hidden" id="userID">
+                <input type="text" class="form-control" id="name" placeholder="Name">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control" id="age" placeholder="Age">
+                <small class="text-danger" id="spanage"></small>
+            </div>
+            <div class="col-md-2">
+                <button id="save" class="btn btn-success w-100">Save</button>
+            </div>
+            <div class="col-md-2">
+                <button id="reset" class="btn btn-secondary w-100">Reset</button>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header d-flex justify-content-center" id="header">
-                    <h5 class="modal-title title " id="ModalLabel">Search</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label"></label>
-                            <input type="text" class="form-control input-text" id="recipient-name" placeholder="NAME">
-                        </div>
-                    </form>
-                    <table class="table table-hover" id="tableresult">
-                        <thead>
-                          <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Age</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Delete</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="buttons" id = "research" >Research</button>
-                    <button type="button" class="buttons" data-bs-dismiss="modal">Close</button>
-                </div>
+    <div class="card p-4 mb-4">
+        <h4 class="mb-3">Search User</h4>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <input type="text" class="form-control" id="recipient-name" placeholder="Search by Name">
+            </div>
+            <div class="col-md-2">
+                <button id="research" class="btn btn-primary w-100">Search</button>
+            </div>
+            <div class="col-md-2">
+                <button id="delete" class="btn btn-danger w-100">Delete Selected</button>
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="./index.js"></script>
+
+    <div class="card p-4">
+        <table id="tableresult" class="table table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function () {
+        loadAllUsers();
+        saveButton();
+        reset();
+        research();
+        resetcampus();
+        clickdelete();
+    });
+
+    function loadAllUsers() {
+        $.get("listall", function (response) {
+            table(response);
+        });
+    }
+
+    function saveButton() {
+        $("#save").click(function () {
+            const id = $("#userID").val();
+            const name = $("#name").val();
+            const age = $("#age").val();
+
+            if (validAge(parseInt(age)) && validName(name)) {
+                $("#spanage").text("");
+                ajaxSave(id, name, parseInt(age));
+            } else {
+                $("#spanage").text("Invalid age");
+            }
+        });
+    }
+
+    function ajaxSave(id, name, age) {
+        $.ajax({
+            url: "save",
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id, name: name, age: age}),
+            success: function (response) {
+                $("#userID").val(response.id);
+                alert("Success");
+                loadAllUsers();
+                resetcampus();
+            }
+        }).fail(function (xhr) {
+            alert("Error saving user: " + xhr.responseText);
+        });
+    }
+
+    function reset() {
+        $("#reset").click(function () {
+            resetcampus();
+        });
+    }
+
+    function research() {
+        $("#research").click(function () {
+            const name = $("#recipient-name").val();
+            if (name) {
+                $.get("searchbyname", {name: name}, function (response) {
+                    table(response);
+                }).fail(function (xhr) {
+                    alert("Error searching user: " + xhr.responseText);
+                });
+            }
+        });
+    }
+
+    function table(response) {
+        const tableBody = $("#tableresult tbody");
+        tableBody.empty();
+        response.forEach(user => {
+            const row = `<tr id='${user.id}'>
+                            <td>${user.id}</td>
+                            <td>${user.name}</td>
+                            <td>${user.age}</td>
+                            <td><button class='btn btn-warning btn-sm' onclick='funcedit(${user.id})'>Edit</button></td>
+                            <td><button class='btn btn-danger btn-sm' onclick='funcdelete(${user.id})'>Delete</button></td>
+                         </tr>`;
+            tableBody.append(row);
+        });
+        $('#tableresult').DataTable();
+    }
+
+    function funcedit(id) {
+        $.get("searchuser", {iduser: id}, function (response) {
+            $("#userID").val(response.id);
+            $("#name").val(response.name);
+            $("#age").val(response.age);
+        }).fail(function (xhr) {
+            alert("Error finding user: " + xhr.responseText);
+        });
+    }
+
+    function funcdelete(id) {
+        if (confirm("Do you really want to delete?")) {
+            $.ajax({
+                url: "delete",
+                type: 'DELETE',
+                data: {iduser: id},
+                success: function (response) {
+                    alert(response);
+                    loadAllUsers();
+                }
+            }).fail(function (xhr) {
+                alert("Error deleting user: " + xhr.responseText);
+            });
+        }
+    }
+
+    function resetcampus() {
+        $("#userID").val("");
+        $("#name").val("");
+        $("#age").val("");
+    }
+
+    function clickdelete() {
+        $("#delete").click(function () {
+            const id = $("#userID").val();
+            if (id) {
+                funcdelete(id);
+            }
+        });
+    }
+
+    function validAge(age) {
+        return age >= 0 && age <= 110;
+    }
+
+    function validName(name) {
+        return name != null && name.trim() !== "";
+    }
+</script>
+
 </body>
-
 </html>
